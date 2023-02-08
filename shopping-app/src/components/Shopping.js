@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Table from "./img/tab.jpg";
 import List from "./img/list.png";
+import Cart from "./img/cart.png";
 
-import {stockData} from './stockData'
+import { stockData } from "./stockData";
 
 export const Shopping = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [format, setFormat] = useState("list");
   const [sortOrder, setSortOrder] = useState("priceAsc");
+  const [cart, setCart] = useState([]);
+  const [showAlertSucesss, setShowAlertSuccess] = useState(false);
 
   useEffect((e) => {
     setProducts(stockData);
@@ -22,6 +25,17 @@ export const Shopping = () => {
   const handleChange = (e) => {
     setSortOrder(e.target.value);
   };
+  const handleAddToCart = (product) => {
+    setCart([...cart, product]);
+    setShowAlertSuccess(true);
+
+    const timer = setTimeout(() => {
+      console.log("This will run after 1 second!");
+      setShowAlertSuccess(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  };
+  console.log(cart);
 
   let sortedProducts = [...products];
 
@@ -55,7 +69,10 @@ export const Shopping = () => {
                 Price: {product.price} ₹
               </td>
               <td className="px-4 mx-4">
-                <button className="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+                <button
+                  className="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                  onClick={() => handleAddToCart(product)}
+                >
                   Add to Cart
                 </button>
               </td>
@@ -83,7 +100,10 @@ export const Shopping = () => {
             </li>
 
             <li>
-              <button className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+              <button
+                className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                onClick={() => handleAddToCart(product)}
+              >
                 Add to Cart
               </button>
             </li>
@@ -92,12 +112,32 @@ export const Shopping = () => {
       </div>
     );
   };
+
+  const ShowSuccessMeg = () => {
+    return (
+      <div
+        className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-2 py-1 shadow-md sticky top-0 right-0"
+        role="alert"
+      >
+        <div class="flex items-center gap-x-8">
+          <div class="py-1">
+            <img className="w-8 h-8" src={Cart} />
+          </div>
+          <div>
+            <p className="font-extrabold">
+              Product is Added to Cart Successfully
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <>
       {/* Navbar */}
-      <nav className="flex justify-around max-w-screen-xl mx-auto bg-slate-400 py-4 w-full">
+      <nav className="flex justify-around max-w-screen-xl mx-auto bg-slate-600 py-3 w-full">
         <ul>
-          <li className="font-bold leading-tight text-3xl mt-0 mb-2 text-blue-600">
+          <li className="font-semibold hoverLfont-bold leading-tight text-2xl mt-0 mb-2 text-blue-600 hover:text-blue-700 bg-slate-100 rounded-lg py-1 px-2 hover:bg-cyan-200 ">
             Shopping App
           </li>
         </ul>
@@ -121,15 +161,13 @@ export const Shopping = () => {
           <li className="list-none">
             <label
               htmlFor="inputConfirmType"
-              className="px-2 font-semibold text-lg"
+              className="px-2 font-semibold text-lg text-white"
             >
               Name:
             </label>
             <select
-              name="confirmType"
-              id="name"
-              className="form-control text-white bg-slate-600 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-600 gray:focus:ring-blue-700"
-              value={setSortOrder}
+              className="form-control text-white border-2 border-blue-700 bg-slate-600 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-600 gray:focus:ring-blue-700"
+              value={sortOrder}
               onChange={handleChange}
             >
               <option
@@ -156,14 +194,14 @@ export const Shopping = () => {
           <li className="list-none px-4">
             <label
               htmlFor="inputConfirmType"
-              className="px-2 font-semibold text-lg"
+              className="px-2 font-semibold text-lg text-white"
             >
               Sort By:
             </label>
 
             <select
               name="confirmType"
-              className="form-control text-white bg-slate-600 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-600 gray:focus:ring-blue-700"
+              className="form-control text-white border-2 border-blue-700 bg-slate-600 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-600 gray:focus:ring-blue-700"
               value={sortOrder}
               onChange={handleChange}
             >
@@ -189,16 +227,21 @@ export const Shopping = () => {
           </li>
         </ul>
       </nav>
-      <div className="h-screen">
-        <div className="grid grid-cols-10 bg-blue-100 h-screen">
+      <div></div>
+      <div className="h-screen bg-blue-100">
+        <div className="grid grid-cols-12 bg-blue-100 h-screen">
           {/* products */}
-          <div className="col-span-7 px-4">
+          <div className="col-span-8  px-4">
             {format === "table" ? <TableData /> : <ListData />}
           </div>
           {/* carts */}
 
-          <div className="col-span-3 px-4">
-            <h1 className="text-3xl">Cart</h1>
+          <div className="col-span-4 px-4 bg-green-200">
+            <div> {showAlertSucesss && <ShowSuccessMeg />}</div>
+            <div className="bg-green-200">
+              
+              <h1 className="text-3xl mt-20 text-center">Cart</h1>
+            </div>
           </div>
         </div>
       </div>

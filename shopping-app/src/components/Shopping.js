@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table from "./img/tab.jpg";
 import List from "./img/list.png";
 import Cart from "./img/cart.png";
-
+import Coupon from "./img/coupon.png";
 import { stockData } from "./stockData";
 
 export const Shopping = () => {
@@ -16,6 +16,7 @@ export const Shopping = () => {
   const [priceArr, SetPriceArr] = useState([]);
   const [inputVal, setinputVal] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [showCouponSucess, setShowCouponSuccess] = useState(false);
 
   useEffect((e) => {
     setProducts(stockData);
@@ -31,6 +32,8 @@ export const Shopping = () => {
   const handleChange = (e) => {
     setSortOrder(e.target.value);
   };
+
+  //executing when products added in cart
   const handleAddToCart = (product) => {
     setCart([...cart, product]);
     SetPriceArr([...priceArr, product.price]);
@@ -40,31 +43,45 @@ export const Shopping = () => {
     const timer = setTimeout(() => {
       // console.log("This will run after 1 second!");
       setShowAlertSuccess(false);
-    }, 1500);
+    }, 5000);
     return () => clearTimeout(timer);
   };
 
+  //executing after appling coupon
   const handleSubmit = (e) => {
     e.preventDefault();
 
     let coupon1 = "ABCD";
     let coupon2 = "FIRST";
     if (inputVal === coupon1) {
+      setShowCouponSuccess(true);
       setDiscount("10");
+      const timer = setTimeout(() => {
+        setShowCouponSuccess(false);
+        setinputVal("");
+      }, 9000);
+      return () => clearTimeout(timer);
     } else if (inputVal === coupon2) {
       setDiscount("20");
+      setShowCouponSuccess(true);
+      const timer = setTimeout(() => {
+        setShowCouponSuccess(false);
+        setinputVal("");
+      }, 1500);
+      return () => clearTimeout(timer);
+    } else {
+      setShowCouponSuccess(false);
     }
-
-    //if edit is true then this statment works
-
-    // setinputVal("");
   };
+
   console.log(discount);
   //this function set the input value in state.
   const handleInput = (e) => {
     setinputVal(e.target.value);
   };
   console.log("jjjjjjj", inputVal);
+
+  //mathematical calculation for price,service tax & coupon applied
   const totalPrice = priceArr.reduce(
     (previousPrice, currentPrice) => previousPrice + currentPrice,
     0
@@ -77,6 +94,7 @@ export const Shopping = () => {
   const coupenPrice = (totalPrice * discount) / 100;
   const finalPrice = totalPrice + serviceTax - coupenPrice;
 
+  //for sorting as per sortOrder selection
   if (sortOrder === "priceDesc") {
     sortedProducts.sort((a, b) => b.price - a.price);
   } else if (sortOrder === "priceAsc") {
@@ -89,6 +107,7 @@ export const Shopping = () => {
     sortedProducts.sort((item) => item);
   }
 
+  // showing data in tabular format
   const TableData = () => {
     return (
       <table className="ml-10 w-5/6">
@@ -121,6 +140,7 @@ export const Shopping = () => {
     );
   };
 
+  // showing data in list format
   const ListData = () => {
     return (
       <div className="grid grid-cols-3 ml-8 gap-5 py-4">
@@ -151,7 +171,8 @@ export const Shopping = () => {
     );
   };
 
-  const ShowSuccessMeg = () => {
+  // showing success message after cart added
+  const ShowSuccessMsg = () => {
     return (
       <div
         className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-2 py-1 shadow-md sticky top-0 right-0"
@@ -165,6 +186,25 @@ export const Shopping = () => {
             <p className="font-extrabold">
               Product is Added to Cart Successfully
             </p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // showing success message after coupon applied
+  const ShowCoupenSuccessMsg = () => {
+    return (
+      <div
+        className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-2 py-1 shadow-md sticky top-0 right-0"
+        role="alert"
+      >
+        <div class="flex items-center gap-x-8">
+          <div class="py-1">
+            <img className="w-16 h-8" src={Coupon} />
+          </div>
+          <div>
+            <p className="font-extrabold">Coupon Applied Successfully!</p>
           </div>
         </div>
       </div>
@@ -201,7 +241,7 @@ export const Shopping = () => {
               htmlFor="inputConfirmType"
               className="px-2 font-semibold text-lg text-white"
             >
-              Name:
+              Sort By Name:
             </label>
             <select
               className="form-control text-white border-2 border-blue-700 bg-slate-600 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-600 gray:focus:ring-blue-700"
@@ -234,7 +274,7 @@ export const Shopping = () => {
               htmlFor="inputConfirmType"
               className="px-2 font-semibold text-lg text-white"
             >
-              Sort By:
+              Sort By Price:
             </label>
 
             <select
@@ -275,23 +315,30 @@ export const Shopping = () => {
           {/* carts */}
 
           <div className="col-span-4 px-4 bg-blue-100">
-            <div> {showAlertSucesss && <ShowSuccessMeg />}</div>
+            <div> {showAlertSucesss && <ShowSuccessMsg />}</div>
+            <div> {showCouponSucess && <ShowCoupenSuccessMsg />}</div>
+
             <div className="bg-blue-100">
               <h1 className="text-3xl mt-8 mx-auto text-center font-semibold border-b-2 border-gray-500 pb-2">
                 Cart
               </h1>
-              {!showEmptyCart && (
-                <div className="text-center text-lg text-gray-600 py-8">
+              {!showEmptyCart && cart && (
+                <div
+                  id="cart"
+                  className="text-center text-lg text-gray-600 py-8"
+                >
                   <p>Cart is empty now!!</p>
                   <p>Add Products to Process Further</p>
                   <div>
-                    <h1>
+                    <h1 className="my-4">
                       Two Coupens are available for{" "}
-                      <span className="text-lg font-bold">Discount</span>
+                      <span className="text-lg font-bold text-blue-700">
+                        Discount
+                      </span>
                     </h1>
                     <ul className="text-2xl font-semibold">
-                      <li>FIRST - 20%</li>
-                      <li>ABCD - 10%</li>
+                      <li className="text-green-600">FIRST - 20%</li>
+                      <li className="text-green-600">ABCD - 10%</li>
                     </ul>
                   </div>
                 </div>
@@ -371,13 +418,21 @@ export const Shopping = () => {
                       </div>
 
                       {/* 3 */}
-                      <div className="border-b-2 border-gray-500 pb-2 mx-auto text-center ">
-                        <div className="ml-8 my-4 py-2 flex flex-col  rounded-md   hover:border-yellow-700 bg-slate-100 hover:bg-slate-200 justify-around px-2">
+                      <div className="pb-2 mx-auto text-center ">
+                        <div className="ml-8 my-4 py-2 flex flex-col  rounded-md  hover:bg-slate-200 justify-around px-2">
                           <div className="px-4 mr-8 text-base font-medium text-left flex justify-between">
                             <p>Total</p>
                             <p className="font-semibold  text-blue-900">
                               {finalPrice} ₹
                             </p>
+                          </div>
+                          <div className="px-4 mr-6 text-base font-medium mt-4">
+                            <button
+                              type="button"
+                              class="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                            >
+                              Order
+                            </button>
                           </div>
                         </div>
                       </div>

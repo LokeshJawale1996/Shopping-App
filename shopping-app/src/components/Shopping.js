@@ -12,11 +12,15 @@ export const Shopping = () => {
   const [sortOrder, setSortOrder] = useState("priceAsc");
   const [cart, setCart] = useState([]);
   const [showAlertSucesss, setShowAlertSuccess] = useState(false);
+  const [showEmptyCart, setsShowEmptyCart] = useState(false);
+  const [priceArr, SetPriceArr] = useState([]);
 
   useEffect((e) => {
     setProducts(stockData);
     setLoading(false);
   }, []);
+  console.log(cart);
+  console.log(priceArr);
 
   const handleFormat = (format) => {
     setFormat(format);
@@ -27,18 +31,27 @@ export const Shopping = () => {
   };
   const handleAddToCart = (product) => {
     setCart([...cart, product]);
+    SetPriceArr([...priceArr, product.price]);
     setShowAlertSuccess(true);
+    setsShowEmptyCart(true);
 
     const timer = setTimeout(() => {
-      console.log("This will run after 1 second!");
+      // console.log("This will run after 1 second!");
       setShowAlertSuccess(false);
     }, 1000);
     return () => clearTimeout(timer);
   };
-  console.log(cart);
 
+  const totalPrice = priceArr.reduce(
+    (previousPrice, currentPrice) => previousPrice + currentPrice,
+    0
+  );
+  console.log(totalPrice);
+
+  const serviceTax = totalPrice * 0.21;
   let sortedProducts = [...products];
 
+  const finalPrice = totalPrice + serviceTax;
   if (sortOrder === "priceDesc") {
     sortedProducts.sort((a, b) => b.price - a.price);
   } else if (sortOrder === "priceAsc") {
@@ -239,8 +252,54 @@ export const Shopping = () => {
           <div className="col-span-4 px-4 bg-green-200">
             <div> {showAlertSucesss && <ShowSuccessMeg />}</div>
             <div className="bg-green-200">
-              
-              <h1 className="text-3xl mt-20 text-center">Cart</h1>
+              <h1 className="text-3xl mt-8 mx-auto text-center font-semibold border-b-2 border-blue-500 pb-2">
+                Cart
+              </h1>
+              {!showEmptyCart && (
+                <div className="text-center text-lg text-gray-600 py-8">
+                  <p>Cart is empty now!!</p>
+                  <p>Add Products to Process Further</p>
+                </div>
+              )}
+              <div className="">
+                <div className="">
+                  <div className="border-b-2 border-gray-500 pb-2 mx-auto text-center">
+                    {cart.map((product) => (
+                      <div
+                        key={product.id}
+                        className="ml-8 my-4 py-2 flex flex-row  rounded-md  border-yellow-300 hover:border-yellow-700 bg-slate-100 hover:bg-slate-200 items-center justify-around px-2 "
+                      >
+                        <p className="px-4 mr-8 text-lg font-medium">
+                          {product.name}
+                        </p>
+                        <p className="font-semibold  text-blue-900 ">
+                          Price: {product.price} ₹{" "}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="border-b-2 border-gray-500 pb-2 mx-auto text-center ">
+                    <div className="ml-8 my-4 py-2 flex flex-col  rounded-md   hover:border-yellow-700 bg-slate-100 hover:bg-slate-200 justify-around px-2">
+                      <div className="px-4 mr-8 text-base font-medium text-left flex justify-between">
+                        <p>SubTotal</p>
+                        <p className="font-semibold  text-blue-900">{totalPrice} ₹</p>
+                      </div>
+                      <div className="px-4 mr-8 font-medium text-base text-left flex justify-between">
+                        <p>Servive Tax (21%)</p>
+                        <p className="font-semibold  text-blue-900">{serviceTax} ₹</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border-b-2 border-gray-500 pb-2 mx-auto text-center ">
+                    <div className="ml-8 my-4 py-2 flex flex-col  rounded-md   hover:border-yellow-700 bg-slate-100 hover:bg-slate-200 justify-around px-2">
+                      <div className="px-4 mr-8 text-base font-medium text-left flex justify-between">
+                      <p>Total</p>
+                        <p className="font-semibold  text-blue-900">{totalPrice} ₹</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -14,6 +14,7 @@ export const Shopping = () => {
   const [showAlertSucesss, setShowAlertSuccess] = useState(false);
   const [showEmptyCart, setsShowEmptyCart] = useState(false);
   const [priceArr, SetPriceArr] = useState([]);
+  const [inputVal, setinputVal] = useState("");
   const [discount, setDiscount] = useState(0);
 
   useEffect((e) => {
@@ -43,6 +44,27 @@ export const Shopping = () => {
     return () => clearTimeout(timer);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let coupon1 = "ABCD";
+    let coupon2 = "FIRST";
+    if (inputVal === coupon1) {
+      setDiscount("10");
+    } else if (inputVal === coupon2) {
+      setDiscount("20");
+    }
+
+    //if edit is true then this statment works
+
+    // setinputVal("");
+  };
+  console.log(discount);
+  //this function set the input value in state.
+  const handleInput = (e) => {
+    setinputVal(e.target.value);
+  };
+  console.log("jjjjjjj", inputVal);
   const totalPrice = priceArr.reduce(
     (previousPrice, currentPrice) => previousPrice + currentPrice,
     0
@@ -52,7 +74,9 @@ export const Shopping = () => {
   const serviceTax = totalPrice * 0.21;
   let sortedProducts = [...products];
 
-  const finalPrice = totalPrice + serviceTax;
+  const coupenPrice = (totalPrice * discount) / 100;
+  const finalPrice = totalPrice + serviceTax - coupenPrice;
+
   if (sortOrder === "priceDesc") {
     sortedProducts.sort((a, b) => b.price - a.price);
   } else if (sortOrder === "priceAsc") {
@@ -260,6 +284,16 @@ export const Shopping = () => {
                 <div className="text-center text-lg text-gray-600 py-8">
                   <p>Cart is empty now!!</p>
                   <p>Add Products to Process Further</p>
+                  <div>
+                    <h1>
+                      Two Coupens are available for{" "}
+                      <span className="text-lg font-bold">Discount</span>
+                    </h1>
+                    <ul className="text-2xl font-semibold">
+                      <li>FIRST - 20%</li>
+                      <li>ABCD - 10%</li>
+                    </ul>
+                  </div>
                 </div>
               )}
               <div className="">
@@ -274,7 +308,7 @@ export const Shopping = () => {
                           {product.name}
                         </p>
                         <p className="font-semibold  text-blue-900 ">
-                          Price: {product.price} ₹{" "}
+                          {product.price} ₹{" "}
                         </p>
                       </div>
                     ))}
@@ -285,24 +319,29 @@ export const Shopping = () => {
                       <div className="border-b-2 border-gray-500 pb-2 mx-auto text-center ">
                         <div className="ml-8 my-4 py-2 flex flex-col  rounded-md   hover:border-yellow-700 bg-slate-100 hover:bg-slate-200 justify-around px-2">
                           <div className="px-4 mr-4 font-medium text-base text-left">
-                            <form className="flex justify-between items-center mx-auto gap-x-6">
-                              <div className="">
-                                <input
-                                  type="text"
-                                  id="coupen"
-                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  placeholder="Enter Your Coupon Code"
-                                  required
-                                />
-                              </div>
-                              <div className="mt-2">
-                                <button
-                                  type="button"
-                                  class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-                                >
-                                  Apply
-                                </button>
-                              </div>
+                            <form
+                              className="flex justify-between items-center mx-auto gap-x-6"
+                              onSubmit={handleSubmit}
+                            >
+                              {/* <div className=""> */}
+                              <input
+                                type="text"
+                                id="coupen"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Enter Your Coupon Code"
+                                required
+                                value={inputVal}
+                                onChange={handleInput}
+                              />
+                              {/* </div> */}
+                              {/* <div className="mt-2"> */}
+                              <button
+                                type="submit"
+                                class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                              >
+                                Apply
+                              </button>
+                              {/* </div> */}
                             </form>
                           </div>
                         </div>
@@ -320,6 +359,12 @@ export const Shopping = () => {
                             <p>Service Tax (21%)</p>
                             <p className="font-semibold  text-blue-900">
                               {serviceTax} ₹
+                            </p>
+                          </div>
+                          <div className="px-4 mr-8 font-medium text-base text-left flex justify-between">
+                            <p>Discount</p>
+                            <p className="font-semibold  text-blue-900">
+                              -{coupenPrice} ₹
                             </p>
                           </div>
                         </div>

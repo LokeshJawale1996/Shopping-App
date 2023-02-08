@@ -14,13 +14,14 @@ export const Shopping = () => {
   const [showAlertSucesss, setShowAlertSuccess] = useState(false);
   const [showEmptyCart, setsShowEmptyCart] = useState(false);
   const [priceArr, SetPriceArr] = useState([]);
+  const [discount, setDiscount] = useState(0);
 
   useEffect((e) => {
     setProducts(stockData);
     setLoading(false);
   }, []);
-  console.log(cart);
-  console.log(priceArr);
+  // console.log(cart);
+  // console.log(priceArr);
 
   const handleFormat = (format) => {
     setFormat(format);
@@ -38,7 +39,7 @@ export const Shopping = () => {
     const timer = setTimeout(() => {
       // console.log("This will run after 1 second!");
       setShowAlertSuccess(false);
-    }, 1000);
+    }, 1500);
     return () => clearTimeout(timer);
   };
 
@@ -240,7 +241,7 @@ export const Shopping = () => {
           </li>
         </ul>
       </nav>
-      <div></div>
+
       <div className="h-screen bg-blue-100">
         <div className="grid grid-cols-12 bg-blue-100 h-screen">
           {/* products */}
@@ -249,10 +250,10 @@ export const Shopping = () => {
           </div>
           {/* carts */}
 
-          <div className="col-span-4 px-4 bg-green-200">
+          <div className="col-span-4 px-4 bg-blue-100">
             <div> {showAlertSucesss && <ShowSuccessMeg />}</div>
-            <div className="bg-green-200">
-              <h1 className="text-3xl mt-8 mx-auto text-center font-semibold border-b-2 border-blue-500 pb-2">
+            <div className="bg-blue-100">
+              <h1 className="text-3xl mt-8 mx-auto text-center font-semibold border-b-2 border-gray-500 pb-2">
                 Cart
               </h1>
               {!showEmptyCart && (
@@ -278,26 +279,65 @@ export const Shopping = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="border-b-2 border-gray-500 pb-2 mx-auto text-center ">
-                    <div className="ml-8 my-4 py-2 flex flex-col  rounded-md   hover:border-yellow-700 bg-slate-100 hover:bg-slate-200 justify-around px-2">
-                      <div className="px-4 mr-8 text-base font-medium text-left flex justify-between">
-                        <p>SubTotal</p>
-                        <p className="font-semibold  text-blue-900">{totalPrice} ₹</p>
+                  {showEmptyCart && cart && (
+                    <div>
+                      {/* 1 */}
+                      <div className="border-b-2 border-gray-500 pb-2 mx-auto text-center ">
+                        <div className="ml-8 my-4 py-2 flex flex-col  rounded-md   hover:border-yellow-700 bg-slate-100 hover:bg-slate-200 justify-around px-2">
+                          <div className="px-4 mr-4 font-medium text-base text-left">
+                            <form className="flex justify-between items-center mx-auto gap-x-6">
+                              <div className="">
+                                <input
+                                  type="text"
+                                  id="coupen"
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  placeholder="Enter Your Coupon Code"
+                                  required
+                                />
+                              </div>
+                              <div className="mt-2">
+                                <button
+                                  type="button"
+                                  class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                                >
+                                  Apply
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
                       </div>
-                      <div className="px-4 mr-8 font-medium text-base text-left flex justify-between">
-                        <p>Servive Tax (21%)</p>
-                        <p className="font-semibold  text-blue-900">{serviceTax} ₹</p>
+                      {/* 2 */}
+                      <div className="border-b-2 border-gray-500 pb-2 mx-auto text-center ">
+                        <div className="ml-8 my-4 py-2 flex flex-col  rounded-md   hover:border-yellow-700 bg-slate-100 hover:bg-slate-200 justify-around px-2">
+                          <div className="px-4 mr-8 text-base font-medium text-left flex justify-between">
+                            <p>SubTotal</p>
+                            <p className="font-semibold  text-blue-900">
+                              {totalPrice} ₹
+                            </p>
+                          </div>
+                          <div className="px-4 mr-8 font-medium text-base text-left flex justify-between">
+                            <p>Service Tax (21%)</p>
+                            <p className="font-semibold  text-blue-900">
+                              {serviceTax} ₹
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 3 */}
+                      <div className="border-b-2 border-gray-500 pb-2 mx-auto text-center ">
+                        <div className="ml-8 my-4 py-2 flex flex-col  rounded-md   hover:border-yellow-700 bg-slate-100 hover:bg-slate-200 justify-around px-2">
+                          <div className="px-4 mr-8 text-base font-medium text-left flex justify-between">
+                            <p>Total</p>
+                            <p className="font-semibold  text-blue-900">
+                              {finalPrice} ₹
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="border-b-2 border-gray-500 pb-2 mx-auto text-center ">
-                    <div className="ml-8 my-4 py-2 flex flex-col  rounded-md   hover:border-yellow-700 bg-slate-100 hover:bg-slate-200 justify-around px-2">
-                      <div className="px-4 mr-8 text-base font-medium text-left flex justify-between">
-                      <p>Total</p>
-                        <p className="font-semibold  text-blue-900">{totalPrice} ₹</p>
-                      </div>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -43,7 +43,7 @@ export const Shopping = () => {
     const timer = setTimeout(() => {
       // console.log("This will run after 1 second!");
       setShowAlertSuccess(false);
-    }, 5000);
+    }, 1500);
     return () => clearTimeout(timer);
   };
 
@@ -59,7 +59,7 @@ export const Shopping = () => {
       const timer = setTimeout(() => {
         setShowCouponSuccess(false);
         setinputVal("");
-      }, 9000);
+      }, 1500);
       return () => clearTimeout(timer);
     } else if (inputVal === coupon2) {
       setDiscount("20");

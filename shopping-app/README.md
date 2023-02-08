@@ -1,8 +1,12 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Details
 
-## Available Scripts
+#### In this Project We are able to see the products on screen in tabular as well as list format as per selection
+
+#### We are able to add products in cart
+
+#### when we find total price of order 21 % service tax are added and as per coupen applied amount was deducted from order total
 
 In the project directory, you can run:
 
@@ -11,24 +15,15 @@ In the project directory, you can run:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-
-# Shopping-App
+## UI Screenshots
 
 ### Initial UI before Product added to cart
  <img  width="800" src="https://github.com/LokeshJawale1996/easfdd/blob/main/images/shopping1.png">
 
 ### UI after product added in cart
-<img  width="800" src="https://github.com/LokeshJawale1996/easfdd/blob/main/images/shopping2.jpg">
+<img  width="800" src="https://github.com/LokeshJawale1996/easfdd/blob/main/images/shopping2.png">
 
 ## UI while coupon applied
-<img  width="800" src="https://github.com/LokeshJawale1996/easfdd/blob/main/images/shopping3.jpg">
-
-## Project Details
-
-#### In this Project We are able to see the products on screen in tabular as well as list format as per selection
-
-#### We are able to add products in cart
-
-#### when we find total price of order 21 % service tax are added and as per coupen applied amount was deducted from order total
+<img  width="800" src="https://github.com/LokeshJawale1996/easfdd/blob/main/images/shopping3.png">
 
 
